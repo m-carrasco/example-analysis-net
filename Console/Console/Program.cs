@@ -2,11 +2,11 @@
 using Backend.Analyses;
 using Backend.Model;
 using Backend.ThreeAddressCode.Values;
-using Backend.Transformations;
 using Console.Utils;
 using Microsoft.Cci;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +47,12 @@ namespace Console
 
                 // the result is the subset of live variables for each basic block in the cfg
                 DataFlowAnalysisResult<Backend.Utils.Subset<IVariable>>[] result = liveVariables.Result;
+
+                // export results
+                // it generates two files in the same directory as the executable:
+                // 1) cfg.dot contains a .dot representation of the control flow graph
+                // 2) live_variable_analysis.txt plain text representation of the live variable analysis
+                Export.ExportExample(cfg, result);
             }
         }
 
