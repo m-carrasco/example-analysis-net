@@ -32,7 +32,6 @@ msbuild
 ## Running generated executable:
 ```
 mono this_repository/Console/Console/bin/Debug/Console.exe
-msbuild 
 ```
 ## Developing using MonoDevelop
 Open Console/Console.sln using the IDE
