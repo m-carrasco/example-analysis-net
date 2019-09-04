@@ -2,6 +2,10 @@
 
 Here you have a basic console app that uses analysis-net as a dependency. In the console example, you have a C# program source code that is compiled in order to do a live variable analysis.
 
+The console generates two files in the same folder it is. The files are:
+1. cfg.dot which represents the control flow graph (you can visualize it here: https://dreampuf.github.io/GraphvizOnline/)
+2. live_variable_analysis.txt represents the result of the analysis for each control flow graph node
+
 # Setup submodule dependencies (for all platforms!)
 ```
 cd this_repository
