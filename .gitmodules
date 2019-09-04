@@ -1,0 +1,3 @@
+[submodule "analysis-net"]
+	path = analysis-net
+	url = https://github.com/m7nu3l/analysis-net
