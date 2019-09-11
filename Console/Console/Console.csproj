@@ -113,6 +113,10 @@
       <Project>{34B9A0CE-DF18-4CBC-8F7A-90C2B74338D5}</Project>
       <Name>PeReader</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NewAnalyses\NewAnalyses.csproj">
+      <Project>{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}</Project>
+      <Name>NewAnalyses</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cci", "cci", "{8715554F-6F0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analysis-net", "analysis-net", "{68A5379B-7D3F-4353-9225-15EE03AE0534}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewAnalyses", "NewAnalyses\NewAnalyses.csproj", "{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,14 @@ Global
 		{4B0054FD-124A-4037-9965-BDB55E6BF389}.NightlyRelease|Any CPU.Build.0 = Release|Any CPU
 		{4B0054FD-124A-4037-9965-BDB55E6BF389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B0054FD-124A-4037-9965-BDB55E6BF389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.NightlyDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.NightlyDebug|Any CPU.Build.0 = Debug|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.NightlyRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.NightlyRelease|Any CPU.Build.0 = Release|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FDB8BD1-1407-423A-BBBD-C7403A7E4ED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
