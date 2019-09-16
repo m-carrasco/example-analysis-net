@@ -1,13 +1,11 @@
 ﻿using Backend.Analyses;
 using Backend.Model;
 using Backend.Serialization;
+using Model.ThreeAddressCode.Values;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Backend.ThreeAddressCode.Values;
 
 namespace Console.Utils
 {

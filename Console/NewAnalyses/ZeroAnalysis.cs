@@ -1,7 +1,10 @@
 ﻿using Backend.Analyses;
 using Backend.Model;
-using Backend.ThreeAddressCode.Instructions;
-using Backend.ThreeAddressCode.Values;
+using Model;
+using Model.ThreeAddressCode.Instructions;
+using Model.ThreeAddressCode.Values;
+//using Backend.ThreeAddressCode.Instructions;
+//using Backend.ThreeAddressCode.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +93,7 @@ namespace NewAnalyses
 
             // we are computing transfer[n](X) = gen(n) U (X - kill(n))
 
-            foreach (Instruction ins in node.Instructions)
+            foreach (IInstruction ins in node.Instructions)
             {
                 if (ins is LoadInstruction loadInstruction)
                 {
