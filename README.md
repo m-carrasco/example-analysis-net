@@ -12,7 +12,8 @@ cd this_repository
 git submodule update --init --recursive
 ```
 # For Windows
-1. Directly open Console/Console.sln using Visual Studio (it worked for Visual Studio 2019).
+1. Using Visual Studio compile analysis-net/CCI Backend.sln
+2. Using Visual Studio compile Console/Console.sln using Visual Studio (it worked for Visual Studio 2019).
 Visual Studio should automatically install nuget dependecies. If it doen't load them, do it yourself.
 Go to the Solution Explorer tab, right click on the solution and then left click "Restore NuGet packages".
 
@@ -25,7 +26,10 @@ Go to the Solution Explorer tab, right click on the solution and then left click
 
 ## Install nuget dependencies (only needed once):
 ```
-cd this_repository/Console
+cd this_repository/analysis-net
+nuget restore
+cd ..
+cd Console
 nuget restore
 ```
 ## Command-line compilation:
