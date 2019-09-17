@@ -15,6 +15,72 @@ namespace Console
         {
             RunLiveVariableAnalysisExample();
             RunZeroAnalysisExample();
+            RunTaintAnalysisExample();
+        }
+
+        public static void RunTaintAnalysisExample()
+        {
+            string liveVariableExample = CompileTaintAnalysisExample();
+            Host host = new Host();
+            ILoader provider = new CCIProvider.Loader(host);
+            // load binaries that are gonna be analyzed
+            var assembly = provider.LoadAssembly(liveVariableExample);
+
+            // search for the method definition in the assembly
+            // if you inspect this method definitions they are defined using the .NET IL instructions (aka bytecode)
+
+            var allDefinedMethodsInAssembly = assembly.RootNamespace.Types // get all defined types in the assembly 
+                .SelectMany(typeDefinition => typeDefinition.Methods); /// get all defined methods 
+
+            var targetMethod = allDefinedMethodsInAssembly.Where(m => m.Name.Contains("ReceiveDataForQuery")).First();
+
+            // transform it into a typed stackless three addres code representation
+            // this is a result of analysis-net framework
+            ControlFlowGraph cfg = null;
+            MethodBody methodBody = Transformations.ThreeAddressCode(targetMethod, out cfg);
+
+            // on top of the three address representation we apply a taint analysis
+            // it is far easier to implement such analysis on this representation
+            // if you intent to apply it on top of the IL bytecode, you will have to guess what you have in the stack for each instruction
+            TaintAnalysis taintAnalysis = new TaintAnalysis(cfg);
+            var r = taintAnalysis.Analyze();
+        }
+
+        public static string CompileTaintAnalysisExample()
+        {
+            string sourceCode = @"
+                using System;
+
+                public class C {
+    
+                    public int ReceiveDataForQuery(int userInput, int nonUserInput) {
+        
+ 		                userInput = SourceStub.TaintHigh(userInput); 
+                        // ****** compute something depending on user input ******
+                        int c = 0;
+                        for (int i = 0; i < userInput; i++){
+        	                c = userInput*2;
+                        }
+        
+                        // ****** compute something not depending on user input ******
+                        int d = 0;
+                        for (int i = 0; i < nonUserInput; i++){
+        	                d = nonUserInput*2;
+                        }
+        
+                        return d * c;
+                    }
+                }
+
+                public class SourceStub{
+	                public static int TaintHigh(int i) {return i;}
+                }
+            ";
+
+            Compiler compiler = new Compiler();
+            var binaryPath = compiler.CompileSource(sourceCode);
+
+            return binaryPath;
         }
 
         public static void RunZeroAnalysisExample()

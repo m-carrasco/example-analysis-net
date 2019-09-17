@@ -3,13 +3,9 @@ using Backend.Model;
 using Model;
 using Model.ThreeAddressCode.Instructions;
 using Model.ThreeAddressCode.Values;
-//using Backend.ThreeAddressCode.Instructions;
-//using Backend.ThreeAddressCode.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NewAnalyses
 {
