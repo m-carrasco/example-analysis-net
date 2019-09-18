@@ -5,7 +5,7 @@ using Model.Types;
 
 namespace Console.Utils
 {
-    class Transformations
+    public class Transformations
     {
         // this function applies analysis-net analyses on the method defined in our assembly (methodDefinition)
         // the result is a typed stackless three address code representation of the orignal method definition body
