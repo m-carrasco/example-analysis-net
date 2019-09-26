@@ -169,6 +169,16 @@ namespace NewAnalyses
 
                     Result.SetTaint(instruction.Result, exitResult.GetTaint(returnIns.Variables.First()));
                 }
+                
+                /*// intraprocedural
+                if (instruction.Arguments.Any(a => input.GetTaint(a) >= TaintAnalysisStatus.LOW))
+                {
+                    Result.SetTaint(instruction.Result, TaintAnalysisStatus.HIGH);
+                    return;
+                }
+
+                throw new NotImplementedException();
+                */
             }
             public override void Visit(UnconditionalBranchInstruction instruction) { }
             public override void Visit(ConditionalBranchInstruction instruction) { }
@@ -177,19 +187,18 @@ namespace NewAnalyses
                 Result.SetTaint(instruction.Result, r);
             }
             public override void Visit(ReturnInstruction instruction) { }
+            public override void Visit(NopInstruction instruction) { }
+
 
             // these are abstract classes, we override the implementations
             public override void Visit(DefinitionInstruction instruction) {}
             public override void Visit(Instruction instruction) {}
             public override void Visit(BranchInstruction instruction) {}
-
-
+               
             // *************************************************************************************************************
-
 
             public override void Visit(UnaryInstruction instruction) { throw new NotImplementedException(); }
             public override void Visit(StoreInstruction instruction) { throw new NotImplementedException(); }
-            public override void Visit(NopInstruction instruction) { throw new NotImplementedException(); }
             public override void Visit(BreakpointInstruction instruction) { throw new NotImplementedException(); }
             public override void Visit(TryInstruction instruction) { throw new NotImplementedException(); }
             public override void Visit(FaultInstruction instruction) { throw new NotImplementedException(); }
