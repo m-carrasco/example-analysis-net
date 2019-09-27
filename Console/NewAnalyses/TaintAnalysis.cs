@@ -1,5 +1,6 @@
 ﻿using Backend.Analyses;
 using Backend.Model;
+using Console.Utils;
 using Model;
 using Model.ThreeAddressCode.Expressions;
 using Model.ThreeAddressCode.Instructions;
@@ -126,12 +127,6 @@ namespace NewAnalyses
                     throw new NotImplementedException();
             }
 
-            private ControlFlowGraph CreateControlFlowGraph(IMethodReference methodReference, out MethodBody methodBody)
-            {
-                MethodDefinition methodDefinition = methodReference.ResolvedMethod;
-
-                return null;
-            }
             public override void Visit(MethodCallInstruction instruction) {
 
                 var name = instruction.Method.Name;
@@ -139,10 +134,19 @@ namespace NewAnalyses
                 {
                     Result.SetTaint(instruction.Result, TaintAnalysisStatus.HIGH);
                     return;
-                } else if (instruction.Method.ReturnType != PlatformTypes.Void)
+                }
+                else if (name.Equals("TaintLow"))
                 {
-                    MethodBody methodBody = null;
-                    ControlFlowGraph cfg = CreateControlFlowGraph(instruction.Method, out methodBody);
+                    if (instruction.Arguments.Any(v => input.GetTaint(v) > TaintAnalysisStatus.LOW))
+                        Result.SetTaint(instruction.Result, TaintAnalysisStatus.HIGH);
+                    else
+                        Result.SetTaint(instruction.Result, TaintAnalysisStatus.LOW);
+                    return;
+                }
+                else if (instruction.Method.ReturnType != PlatformTypes.Void)
+                {
+                    ControlFlowGraph cfg;
+                    MethodBody methodBody = Transformations.ThreeAddressCode(instruction.Method.ResolvedMethod, out cfg);
 
                     var analysisParameters = new TaintAnalysisResult();
                     var variables = cfg.Nodes.SelectMany(n => n.Instructions).SelectMany(i => i.Variables);
@@ -160,7 +164,6 @@ namespace NewAnalyses
                     TaintAnalysis taintAnalysis = new TaintAnalysis(cfg, analysisParameters);
                     var result = taintAnalysis.Analyze();
 
-                    // el exit tiene un output como fluye a el?
                     var exitResult = result[cfg.Exit.Id].Output;
 
                     // que variable es el exit?
@@ -169,16 +172,6 @@ namespace NewAnalyses
 
                     Result.SetTaint(instruction.Result, exitResult.GetTaint(returnIns.Variables.First()));
                 }
-                
-                /*// intraprocedural
-                if (instruction.Arguments.Any(a => input.GetTaint(a) >= TaintAnalysisStatus.LOW))
-                {
-                    Result.SetTaint(instruction.Result, TaintAnalysisStatus.HIGH);
-                    return;
-                }
-
-                throw new NotImplementedException();
-                */
             }
             public override void Visit(UnconditionalBranchInstruction instruction) { }
             public override void Visit(ConditionalBranchInstruction instruction) { }
@@ -266,6 +259,11 @@ namespace NewAnalyses
 
         protected override ITaintAnalysisResult Flow(CFGNode node, ITaintAnalysisResult input)
         {
+            if (node.Kind == CFGNodeKind.Exit)
+            {
+                return input;
+            }
+
             foreach (Instruction instruction in node.Instructions.Cast<Instruction>())
             {
                 var r = Flow(instruction, input);

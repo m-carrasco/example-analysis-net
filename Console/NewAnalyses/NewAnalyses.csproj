@@ -41,8 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interprocedueral\SuperControlFlowGraph.cs" />
-    <Compile Include="Interprocedueral\VariableRenamer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaintAnalysis.cs" />
     <Compile Include="ZeroAnalysis.cs" />
@@ -55,6 +53,10 @@
     <ProjectReference Include="..\..\analysis-net\Model\Model.csproj">
       <Project>{F08216AD-E55C-44B1-A253-AB8B024B7597}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{3A9BA76F-D261-4098-BA43-A35FAFACF925}</Project>
+      <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
