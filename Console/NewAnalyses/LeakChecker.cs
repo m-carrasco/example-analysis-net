@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NewAnalyses
 {
-    class LeakChecker
+    public class LeakChecker
     {
         private readonly ControlFlowGraph cfg;
 
@@ -32,6 +32,14 @@ namespace NewAnalyses
                 for (int i =0; i < node.Instructions.Count; i++)
                 {
                     MethodCallInstruction call = node.Instructions[i] as MethodCallInstruction;
+
+                    if (call == null)
+                        continue;
+
+                    // skip hardcoded
+                    if (call.Method.Name.Equals("TaintHigh") ||
+                        call.Method.Name.Equals("TaintLow"))
+                        continue;
 
                     // find sucessors
 

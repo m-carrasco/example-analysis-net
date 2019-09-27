@@ -143,7 +143,7 @@ namespace NewAnalyses
                         Result.SetTaint(instruction.Result, TaintAnalysisStatus.LOW);
                     return;
                 }
-                else if (instruction.Method.ReturnType != PlatformTypes.Void)
+                else if (!instruction.Method.ReturnType.Equals(PlatformTypes.Void))
                 {
                     ControlFlowGraph cfg;
                     MethodBody methodBody = Transformations.ThreeAddressCode(instruction.Method.ResolvedMethod, out cfg);

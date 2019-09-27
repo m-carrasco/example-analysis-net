@@ -2,6 +2,7 @@
 using Backend.Model;
 using Console.Utils;
 using Model;
+using Model.ThreeAddressCode.Instructions;
 using Model.Types;
 using NewAnalyses;
 using NUnit.Framework;
@@ -188,6 +189,79 @@ namespace Test
 
             foreach (var v in taintAtExit.Domain().Where(v => v != v0 && v != v1 && v != v2 && v != v3 && v != v4 && v != v5))
                 Assert.AreEqual(taintAtExit.GetTaint(v), TaintAnalysisStatus.NONE);
+        }
+
+        [Test]
+        public void Test3()
+        {
+            string sourceCode = @"
+                using System;
+
+                public class C {
+
+                    public static void Main(int userInput, int nonUserInput)
+                    {
+                        var r = Test(userInput,nonUserInput);
+                        Console.WriteLine(r);
+                    }
+    
+                    public static int Test(int userInput, int nonUserInput) {
+
+                        userInput = IdentityTaintedHigh(userInput);
+                        nonUserInput = Identity(nonUserInput);
+
+                        // ****** compute something depending on user input ******
+                        int c = 0;
+                        for (int i = 0; i < userInput; i++){
+                            c = userInput*2;
+                        }
+
+                        // ****** compute something not depending on user input ******
+                        int d = 0;
+                        for (int i = 0; i < nonUserInput; i++){
+                            d = nonUserInput*2;
+                        }
+
+                        int high = IdentityTaintedLow(userInput);
+                        int low = IdentityTaintedLow(nonUserInput);
+
+                        return d * c * low;
+                    }
+
+                    public static int IdentityTaintedHigh(int i) {
+                        return SourceStub.TaintHigh(i);
+                    }
+
+                    public static int IdentityTaintedLow(int i) {
+                        return SourceStub.TaintLow(i);
+                    }
+
+                    public static int Identity(int i){
+                        return i;
+                    }
+                }
+
+                public class SourceStub{
+                    public static int TaintHigh(int i) {return i;}
+                    public static int TaintLow(int i) {return i;}
+                }
+                ";
+
+            Compiler compiler = new Compiler();
+            string compiledExamplePath = compiler.CompileSource(sourceCode);
+
+            ControlFlowGraph cfg = null;
+            MethodBody methodBody = Utils.GenerateTAC(compiledExamplePath, "Main", out cfg);
+
+            Utils.SimplifyTAC(cfg, methodBody);
+
+            string cfg_as_dot = Backend.Serialization.DOTSerializer.Serialize(cfg);
+
+            LeakChecker leakChecker = new LeakChecker(cfg);
+            var r = leakChecker.Analyze();
+
+            Assert.AreEqual(r.Count,1);
+            Assert.AreEqual((r.First() as MethodCallInstruction).Method.Name, "WriteLine");
         }
     }
 }
